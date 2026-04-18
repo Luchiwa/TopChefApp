@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TopChef
 
-## Getting Started
+Une application web personnelle pour chercher une même recette sur plusieurs sites de cuisine français et l'afficher dans un template unifié.
 
-First, run the development server:
+Tapez `frites au air fryer`, TopChef interroge Marmiton, 750g, Cuisine Actuelle et Cuisine AZ en parallèle, puis présente chaque recette dans la même mise en page — ingrédients à gauche, étapes à droite — pour comparer d'un coup d'œil et se mettre à cuisiner.
+
+## Démarrage rapide
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ouvrir [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Aucune clé API n'est nécessaire pour démarrer : la recherche utilise par défaut les moteurs de recherche internes des quatre sites.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Recherche Brave (optionnel, recommandé)
 
-## Learn More
+Pour une recherche plus rapide et de meilleure qualité :
 
-To learn more about Next.js, take a look at the following resources:
+1. Créer une clé gratuite sur [api.search.brave.com](https://api.search.brave.com/app/keys) (crédit mensuel de 5 $ ≈ 1000 requêtes).
+2. Copier `.env.local.example` en `.env.local` et coller la clé :
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   cp .env.local.example .env.local
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. Redémarrer `npm run dev`.
 
-## Deploy on Vercel
+Si `BRAVE_API_KEY` n'est pas défini, TopChef bascule automatiquement sur la recherche directe par site.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Sites supportés
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Site | Couleur du badge |
+|---|---|
+| Marmiton | bordeaux |
+| 750g | olive |
+| Cuisine Actuelle | ocre |
+| Cuisine AZ | teal |
+
+L'extraction repose sur le bloc JSON-LD `schema.org/Recipe` que ces quatre sites exposent pour le SEO. Un seul parseur couvre donc tous les sites et reste stable tant qu'ils suivent la norme.
+
+## Mode cuisine
+
+Sur la page d'une recette, le bouton **Mode cuisine** :
+- agrandit le texte des étapes pour qu'il reste lisible depuis le plan de travail,
+- active la Screen Wake Lock API pour empêcher l'écran de s'éteindre pendant la cuisson.
+
+## Pile technique
+
+Next.js 16 (App Router, server components), React 19, TypeScript, Tailwind CSS v4, cheerio pour le parsing HTML, zod pour la validation, lucide-react pour les icônes.
+
+## Scripts utiles
+
+```bash
+npm run dev     # développement
+npm run build   # build de production
+npm run lint    # ESLint
+```
+
+Les scripts de test manuel se trouvent dans `scripts/` (scraping et recherche sur des URLs réelles).
+
+## Pistes futures
+
+- Favoris en `localStorage`.
+- Liste de courses agrégée à partir de plusieurs recettes.
+- Adaptation du nombre de portions avec recalcul des quantités.
+- Plus de sites (Journal des Femmes, Papilles et Pupilles…).
