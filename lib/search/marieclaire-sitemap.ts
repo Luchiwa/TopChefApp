@@ -10,8 +10,16 @@ const USER_AGENT =
 type Entry = {
   url: string;
   title: string;
-  normalized: string;
+  slugWords: string[];
 };
+
+function splitWords(text: string): string[] {
+  return text.split(/[^\p{L}\p{N}]+/u).filter((w) => w.length >= 3);
+}
+
+function tokenMatchesSlug(tok: string, slugWords: string[]): boolean {
+  return slugWords.some((word) => word === tok || word.startsWith(tok));
+}
 
 type Cache = {
   entries: Entry[];
@@ -54,7 +62,7 @@ function parseEntries(xml: string): Entry[] {
     entries.push({
       url,
       title,
-      normalized: normalize(title),
+      slugWords: splitWords(normalize(title)),
     });
   }
   return entries;
@@ -111,10 +119,10 @@ export async function searchMarieClaireSitemap(
   }
   const scored = entries
     .map((entry) => {
-      let matched = 0;
-      for (const tok of tokens) {
-        if (entry.normalized.includes(tok)) matched += 1;
-      }
+      const matched = tokens.reduce(
+        (n, tok) => n + (tokenMatchesSlug(tok, entry.slugWords) ? 1 : 0),
+        0,
+      );
       return { entry, matched };
     })
     .filter((s) => s.matched > 0);
