@@ -49,7 +49,7 @@ export function Masthead() {
               />
             </h1>
             <p className="mt-4 max-w-md text-base leading-relaxed text-ink-soft sm:text-lg">
-              Une recherche, cinq cuisines françaises, une seule table de
+              Une recherche, six cuisines françaises, une seule table de
               travail. <span className="display-italic text-brique">Chaleureusement</span>{" "}
               composée.
             </p>
@@ -71,7 +71,9 @@ export function Masthead() {
               <Fleuron variant="heart" size={18} className="text-saffron" />
               <div className="smallcaps text-ink-mute">
                 <div>Marmiton · 750g · Marie Claire</div>
-                <div className="mt-0.5">Cuisine Actuelle · Cuisine AZ</div>
+                <div className="mt-0.5">
+                  Cuisine Actuelle · Cuisine AZ · Moulinex
+                </div>
               </div>
             </div>
           </div>

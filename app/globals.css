@@ -42,6 +42,8 @@
   --color-cuisineaz-tint: #dce8ec;
   --color-marieclaire: #b54e6b;
   --color-marieclaire-tint: #f3dde2;
+  --color-moulinex: #6c5aa0;
+  --color-moulinex-tint: #e5e0f0;
 
   --font-display: var(--font-display), "Times New Roman", serif;
   --font-body: var(--font-body), ui-sans-serif, system-ui, sans-serif;

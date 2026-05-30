@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "TopChef — La Gazette Culinaire",
     short_name: "TopChef",
     description:
-      "Une recherche, cinq cuisines. Comparez vos recettes préférées en un coup d'œil.",
+      "Une recherche, six cuisines. Comparez vos recettes préférées en un coup d'œil.",
     start_url: "/",
     display: "standalone",
     orientation: "portrait",

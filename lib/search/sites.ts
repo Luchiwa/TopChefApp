@@ -1,6 +1,7 @@
 import * as cheerio from "cheerio";
 import { SearchHit, SUPPORTED_SITES, SupportedSite } from "@/lib/types";
 import { searchMarieClaireSitemap } from "./marieclaire-sitemap";
+import { searchMoulinexSitemap } from "./moulinex-sitemap";
 
 const MC_TIMEOUT_MS = 2000;
 
@@ -147,6 +148,15 @@ export async function searchAcrossSites(query: string): Promise<SearchHit[]> {
     MC_TIMEOUT_MS,
     [] as SearchHit[],
   );
-  const results = await Promise.all([...sitePromises, mcPromise]);
+  const moulinexPromise = withTimeout(
+    searchMoulinexSitemap(trimmed),
+    MC_TIMEOUT_MS,
+    [] as SearchHit[],
+  );
+  const results = await Promise.all([
+    ...sitePromises,
+    mcPromise,
+    moulinexPromise,
+  ]);
   return results.flat();
 }

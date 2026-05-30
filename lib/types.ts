@@ -38,6 +38,7 @@ export const SUPPORTED_SITES: SupportedSite[] = [
   { host: "cuisineactuelle.fr", name: "Cuisine Actuelle" },
   { host: "cuisineaz.com", name: "Cuisine AZ" },
   { host: "marieclaire.fr", name: "Marie Claire", searchPath: "cuisine" },
+  { host: "moulinex.fr", name: "Moulinex" },
 ];
 
 export function siteForHost(hostname: string): SupportedSite | undefined {

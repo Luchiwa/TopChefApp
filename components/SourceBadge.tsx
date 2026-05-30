@@ -41,6 +41,13 @@ const STYLES: Record<
     dot: "bg-[color:var(--color-marieclaire)]",
     border: "border-[color:var(--color-marieclaire)]",
   },
+  "moulinex.fr": {
+    bg: "bg-[color:var(--color-moulinex)]",
+    fg: "text-[color:var(--color-moulinex-tint)]",
+    tint: "bg-[color:var(--color-moulinex-tint)] text-[color:var(--color-moulinex)]",
+    dot: "bg-[color:var(--color-moulinex)]",
+    border: "border-[color:var(--color-moulinex)]",
+  },
 };
 
 const INITIALS: Record<string, string> = {
@@ -49,6 +56,7 @@ const INITIALS: Record<string, string> = {
   "cuisineactuelle.fr": "C·A",
   "cuisineaz.com": "A·Z",
   "marieclaire.fr": "M·C",
+  "moulinex.fr": "Mx",
 };
 
 function normalize(host: string) {

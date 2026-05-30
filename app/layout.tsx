@@ -24,7 +24,7 @@ const jetBrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "TopChef — La Gazette Culinaire",
   description:
-    "Une recherche, cinq cuisines. Trouvez votre recette idéale sur Marmiton, 750g, Cuisine Actuelle, Cuisine AZ et Marie Claire, dans une seule mise en page.",
+    "Une recherche, six cuisines. Trouvez votre recette idéale sur Marmiton, 750g, Cuisine Actuelle, Cuisine AZ, Marie Claire et Moulinex, dans une seule mise en page.",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,

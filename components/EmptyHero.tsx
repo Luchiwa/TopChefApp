@@ -31,6 +31,12 @@ const SUMMARY = [
     note: "Élégance à table",
     accent: "var(--color-marieclaire)",
   },
+  {
+    folio: "VI",
+    name: "Moulinex",
+    note: "Cookeo & Air Fryer",
+    accent: "var(--color-moulinex)",
+  },
 ];
 
 const SUGGESTIONS = [
@@ -55,14 +61,15 @@ export function EmptyHero() {
 
           <h2 className="display text-[clamp(2rem,4.2vw,3.25rem)] leading-[1.05] text-ink-deep">
             Tapez un plat,{" "}
-            <span className="display-wonk text-brique">cinq cuisines</span>{" "}
+            <span className="display-wonk text-brique">six cuisines</span>{" "}
             vous répondent.
           </h2>
 
           <p className="drop-cap mt-8 max-w-xl text-lg leading-[1.8] text-ink-soft">
             Risotto, tarte tatin, frites au air fryer — un mot suffit. TopChef
             interroge simultanément Marmiton, 750g, Cuisine Actuelle, Cuisine
-            AZ et Marie Claire, puis recompose chaque recette dans un gabarit
+            AZ, Marie Claire et Moulinex, puis recompose chaque recette dans un
+            gabarit
             unique : ingrédients à gauche, étapes à droite, et l&apos;original
             à un clic. Plus besoin de jongler entre quinze onglets.
           </p>
