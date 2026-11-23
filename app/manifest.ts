@@ -2,32 +2,23 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "TopChef — La Gazette Culinaire",
+    name: "TopChef — six brigades, une recherche",
     short_name: "TopChef",
     description:
-      "Une recherche, six cuisines. Comparez vos recettes préférées en un coup d'œil.",
+      "Cherchez un plat ou partez de vos ingrédients, sur six sites de recettes.",
     start_url: "/",
     display: "standalone",
     orientation: "portrait",
-    background_color: "#F5EFE0",
-    theme_color: "#8C2612",
+    background_color: "#121213",
+    theme_color: "#0a0a0b",
     icons: [
+      { src: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { src: "/icon-512.png", sizes: "512x512", type: "image/png" },
       {
-        src: "/icon",
-        sizes: "512x512",
-        type: "image/png",
-        purpose: "any",
-      },
-      {
-        src: "/icon",
+        src: "/icon-512.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",
-      },
-      {
-        src: "/apple-icon",
-        sizes: "180x180",
-        type: "image/png",
       },
     ],
   };

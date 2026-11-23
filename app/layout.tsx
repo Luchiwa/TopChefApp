@@ -1,41 +1,45 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Instrument_Sans, JetBrains_Mono } from "next/font/google";
+import { Anton, Barlow, Barlow_Condensed } from "next/font/google";
+import { AppNav } from "@/components/AppNav";
 import "./globals.css";
 
-const fraunces = Fraunces({
+const anton = Anton({
   variable: "--font-display",
+  weight: "400",
   subsets: ["latin"],
-  axes: ["opsz", "SOFT", "WONK"],
   display: "swap",
 });
 
-const instrumentSans = Instrument_Sans({
+const barlowCondensed = Barlow_Condensed({
+  variable: "--font-cond",
+  weight: ["600", "700"],
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const barlow = Barlow({
   variable: "--font-body",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const jetBrains = JetBrains_Mono({
-  variable: "--font-mono",
+  weight: ["400", "500", "600"],
   subsets: ["latin"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "TopChef — La Gazette Culinaire",
+  title: "TopChef — six brigades, une recherche",
   description:
-    "Une recherche, six cuisines. Trouvez votre recette idéale sur Marmiton, 750g, Cuisine Actuelle, Cuisine AZ, Marie Claire et Moulinex, dans une seule mise en page.",
+    "Cherchez un plat ou partez de vos ingrédients : les recettes de Marmiton, 750g, Cuisine Actuelle, Cuisine AZ, Marie Claire et Moulinex dans une seule mise en page.",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     title: "TopChef",
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#8C2612",
-  colorScheme: "light",
+  themeColor: "#0a0a0b",
+  colorScheme: "dark",
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -44,9 +48,10 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${fraunces.variable} ${instrumentSans.variable} ${jetBrains.variable} antialiased`}
+      className={`${anton.variable} ${barlowCondensed.variable} ${barlow.variable} antialiased`}
     >
-      <body className="min-h-screen bg-cream text-ink selection:bg-brique/90 selection:text-cream">
+      <body className="min-h-screen">
+        <AppNav />
         {children}
       </body>
     </html>

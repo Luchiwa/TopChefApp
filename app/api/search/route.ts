@@ -9,7 +9,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Missing query" }, { status: 400 });
   }
   try {
-    const result = await runSearch(query);
+    const wide = req.nextUrl.searchParams.get("wide") === "1";
+    const result = await runSearch(query, wide ? 8 : undefined);
     return NextResponse.json(result);
   } catch (err) {
     console.error("[api/search]", err);

@@ -1,26 +1,26 @@
 import { Suspense } from "react";
-import { EmptyHero } from "@/components/EmptyHero";
-import { Fleuron } from "@/components/Fleuron";
-import { Masthead } from "@/components/Masthead";
-import { ResultsList } from "@/components/ResultsList";
-import { SearchBar } from "@/components/SearchBar";
+import { DishResults } from "@/components/DishResults";
+import { HomeRecent } from "@/components/HomeRecent";
+import { IngredientResults } from "@/components/IngredientResults";
+import { SearchPanel } from "@/components/SearchPanel";
+import { parseIngredientsParam } from "@/lib/ingredients/match";
 import { runSearch } from "@/lib/search";
 
 type PageProps = {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; i?: string }>;
 };
 
 async function Results({ query }: { query: string }) {
-  const { hits, backend } = await runSearch(query);
-  return <ResultsList query={query} hits={hits} backend={backend} />;
+  const { hits } = await runSearch(query);
+  return <DishResults query={query} hits={hits} />;
 }
 
 function ResultsSkeleton() {
   return (
-    <div className="space-y-6 pt-8">
-      <div className="skeleton h-10 w-2/3 max-w-md rounded-full" />
+    <div className="space-y-2.5" role="status" aria-label="Recherche en cours">
+      <div className="tc-skeleton mb-4 h-9 w-2/3 max-w-md" />
       {[...Array(5)].map((_, i) => (
-        <div key={i} className="skeleton h-32 w-full rounded-3xl" />
+        <div key={i} className="tc-skeleton h-24 w-full" />
       ))}
     </div>
   );
@@ -29,49 +29,34 @@ function ResultsSkeleton() {
 export default async function HomePage({ searchParams }: PageProps) {
   const params = await searchParams;
   const query = (params.q ?? "").trim();
+  const ingredients = parseIngredientsParam(params.i ?? "");
+  const byIngredients = ingredients.length > 0;
+  const hasResults = byIngredients || Boolean(query);
+  const key = byIngredients ? `i:${ingredients.join(",")}` : `q:${query}`;
 
   return (
-    <main className="vignette relative z-10">
-      <div className="stagger stagger-1">
-        <Masthead />
-      </div>
-      <section className="mx-auto max-w-7xl px-5 py-8 sm:px-10 sm:py-10">
-        <div className="stagger stagger-2">
-          <SearchBar initialQuery={query} />
-        </div>
+    <main className="mx-auto max-w-6xl px-4 pb-10 pt-6 sm:px-8 sm:pt-10">
+      <SearchPanel
+        key={key}
+        initialMode={byIngredients ? "ingredients" : "plat"}
+        initialQuery={byIngredients ? "" : query}
+        initialIngredients={ingredients}
+        compact={hasResults}
+      />
 
-        {query ? (
-          <div key={query} className="stagger stagger-3 pt-12">
-            <Suspense fallback={<ResultsSkeleton />}>
-              <Results query={query} />
-            </Suspense>
-          </div>
-        ) : (
-          <div className="stagger stagger-3">
-            <EmptyHero />
-          </div>
-        )}
-      </section>
-      <footer className="relative z-10 mx-auto max-w-7xl px-5 pb-12 pt-8 sm:px-10">
-        <div className="flex items-center justify-center gap-4 text-saffron">
-          <span className="hand-rule h-px flex-1" />
-          <Fleuron variant="heart" size={16} className="text-brique" />
-          <span className="hand-rule h-px flex-1" />
+      {byIngredients ? (
+        <div key={`results-${key}`} className="pt-7">
+          <IngredientResults ingredients={ingredients} />
         </div>
-        <div className="smallcaps mt-6 flex flex-wrap items-center justify-between gap-4 text-ink-mute">
-          <span className="flex items-center gap-2">
-            <span className="cooking-dot" aria-hidden />
-            TopChef · Gazette culinaire personnelle
-          </span>
-          <span className="tnum">
-            N°001 · © {new Date().getFullYear()}
-          </span>
+      ) : query ? (
+        <div key={`results-${key}`} className="pt-7">
+          <Suspense fallback={<ResultsSkeleton />}>
+            <Results query={query} />
+          </Suspense>
         </div>
-        <p className="mt-4 text-center text-xs italic leading-relaxed text-ink-mute/80">
-          Composé à Paris · Encre paprika sur papier brioche · Tirage unique
-          pour Luc
-        </p>
-      </footer>
+      ) : (
+        <HomeRecent />
+      )}
     </main>
   );
 }

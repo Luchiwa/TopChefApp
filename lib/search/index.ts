@@ -10,11 +10,16 @@ export type SearchResult = {
   backend: SearchBackend;
 };
 
-export async function runSearch(query: string): Promise<SearchResult> {
+// `perSite` élargit le nombre de résultats demandés à chaque source (utilisé
+// par la recherche par ingrédients, qui a besoin de plus de candidates).
+export async function runSearch(
+  query: string,
+  perSite?: number,
+): Promise<SearchResult> {
   const apiKey = process.env.BRAVE_API_KEY;
   if (apiKey) {
     try {
-      const raw = await searchWithBrave(query, apiKey);
+      const raw = await searchWithBrave(query, apiKey, perSite);
       if (raw.length > 0) {
         return { hits: rankAndFilter(raw, query), backend: "brave" };
       }
@@ -22,6 +27,6 @@ export async function runSearch(query: string): Promise<SearchResult> {
       console.warn("[search] Brave failed:", err);
     }
   }
-  const raw = await searchAcrossSites(query);
+  const raw = await searchAcrossSites(query, perSite);
   return { hits: rankAndFilter(raw, query), backend: "site-search" };
 }

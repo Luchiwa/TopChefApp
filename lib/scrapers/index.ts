@@ -71,8 +71,11 @@ export async function scrapeRecipe(rawUrl: string): Promise<Recipe> {
     );
   }
 
+  // Marmiton suffixe ses titres d'un slogan (« … : la meilleure recette »).
   const title =
-    typeof jsonld.name === "string" ? jsonld.name.trim() : undefined;
+    typeof jsonld.name === "string"
+      ? jsonld.name.replace(/\s*:\s*la meilleure recette\s*$/i, "").trim()
+      : undefined;
   if (!title) {
     throw new ScrapeError(
       "Recette sans titre détectable.",

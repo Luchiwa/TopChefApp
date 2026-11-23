@@ -113,12 +113,7 @@ export function CookModeToggle() {
     <button
       type="button"
       onClick={handleToggle}
-      className={[
-        "smallcaps group inline-flex items-center gap-2.5 rounded-full border px-4 py-2 transition-all",
-        enabled
-          ? "border-brique-deep bg-gradient-to-br from-brique to-brique-deep text-cream shadow-[0_3px_0_var(--color-brique-deep)] hover:-translate-y-[1px] hover:shadow-[0_4px_0_var(--color-brique-deep)]"
-          : "border-ink/30 bg-cream text-ink hover:border-brique hover:text-brique",
-      ].join(" ")}
+      className="tc-gb"
       aria-pressed={enabled}
     >
       <FlameIcon active={enabled} />
@@ -126,10 +121,8 @@ export function CookModeToggle() {
       {enabled && (
         <span
           aria-hidden
-          className={[
-            "inline-block h-[7px] w-[7px] rounded-full border border-cream",
-            locked ? "bg-[#4aa76a] animate-pulse" : "bg-cream/20",
-          ].join(" ")}
+          title={locked ? "Écran maintenu allumé" : undefined}
+          className={`inline-block h-2 w-2 rounded-full ${locked ? "bg-[#1f7a3d]" : "bg-black/30"}`}
         />
       )}
     </button>

@@ -2,8 +2,10 @@ import * as cheerio from "cheerio";
 import { SearchHit, SUPPORTED_SITES, SupportedSite } from "@/lib/types";
 import { searchMarieClaireSitemap } from "./marieclaire-sitemap";
 import { searchMoulinexSitemap } from "./moulinex-sitemap";
+import { rankAndFilter } from "./relevance";
 
 const MC_TIMEOUT_MS = 2000;
+const SITE_SCAN_LIMIT = 40;
 
 const USER_AGENT =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
@@ -88,11 +90,13 @@ function extractHits(
     const abs = absoluteUrl(href, baseUrl);
     if (!abs || seen.has(abs)) return;
     if (!config.recipeUrlMatcher(abs)) return;
-    const title =
+    const rawTitle =
       $a.text().replace(/\s+/g, " ").trim() ||
       $a.attr("title")?.trim() ||
       $a.find("img").attr("alt")?.trim() ||
       "";
+    // Cuisine Actuelle / Cuisine AZ préfixent leurs liens de « Recette : ».
+    const title = rawTitle.replace(/^recette\s*:\s*/i, "");
     if (!title || title.length < 3) return;
     seen.add(abs);
     hits.push({
@@ -108,11 +112,15 @@ function extractHits(
 async function searchOne(
   config: SiteSearchConfig,
   query: string,
+  perSite?: number,
 ): Promise<SearchHit[]> {
   const url = config.buildUrl(query);
   try {
     const html = await fetchHtml(url);
-    return extractHits(html, url, config);
+    // Les pages de résultats mêlent des recettes « populaires » sans rapport
+    // aux vrais résultats : on relève large, puis on garde les plus pertinentes.
+    const all = extractHits(html, url, config, SITE_SCAN_LIMIT);
+    return rankAndFilter(all, query).slice(0, perSite ?? 4);
   } catch (err) {
     console.warn(`[site-search] ${config.site.host} failed:`, err);
     return [];
@@ -139,10 +147,13 @@ function withTimeout<T>(
   });
 }
 
-export async function searchAcrossSites(query: string): Promise<SearchHit[]> {
+export async function searchAcrossSites(
+  query: string,
+  perSite?: number,
+): Promise<SearchHit[]> {
   const trimmed = query.trim();
   if (!trimmed) return [];
-  const sitePromises = CONFIGS.map((c) => searchOne(c, trimmed));
+  const sitePromises = CONFIGS.map((c) => searchOne(c, trimmed, perSite));
   const mcPromise = withTimeout(
     searchMarieClaireSitemap(trimmed),
     MC_TIMEOUT_MS,

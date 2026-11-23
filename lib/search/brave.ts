@@ -60,12 +60,13 @@ async function searchOneSite(
 export async function searchWithBrave(
   query: string,
   apiKey: string,
+  perSite?: number,
 ): Promise<SearchHit[]> {
   const trimmed = query.trim();
   if (!trimmed) return [];
   const results = await Promise.all(
     SUPPORTED_SITES.map((s) => {
-      const count = s.searchPath ? 6 : 3;
+      const count = perSite ?? (s.searchPath ? 6 : 3);
       return searchOneSite(trimmed, s, apiKey, count).catch((err) => {
         console.warn(`[brave] ${s.host} failed:`, err);
         return [] as SearchHit[];

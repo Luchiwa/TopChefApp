@@ -10,7 +10,15 @@ export async function GET(req: NextRequest) {
   }
   try {
     const recipe = await scrapeRecipe(url);
-    return NextResponse.json({ recipe });
+    return NextResponse.json(
+      { recipe },
+      {
+        headers: {
+          "Cache-Control":
+            "public, max-age=300, s-maxage=86400, stale-while-revalidate=604800",
+        },
+      },
+    );
   } catch (err) {
     if (err instanceof ScrapeError) {
       const status =
