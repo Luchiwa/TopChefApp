@@ -32,6 +32,7 @@ export function RecipeView({
 }) {
   const [checked, toggleChecked] = useToggleSet();
   const [done, toggleDone] = useToggleSet();
+  const [imageFailed, setImageFailed] = useState(false);
 
   const stats: [string, string][] = [];
   if (recipe.prepTimeMinutes)
@@ -46,7 +47,7 @@ export function RecipeView({
 
   return (
     <article>
-      {recipe.image && (
+      {recipe.image && !imageFailed && (
         <div className="relative -mx-4 mb-4 aspect-[16/9] max-h-[340px] overflow-hidden bg-surface sm:mx-0 sm:w-full sm:rounded-xl">
           <Image
             src={recipe.image}
@@ -56,6 +57,7 @@ export function RecipeView({
             className="object-cover"
             unoptimized
             priority
+            onError={() => setImageFailed(true)}
           />
         </div>
       )}

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { IngredientMatch } from "@/lib/ingredients/match";
 import { recipeHref, recipeMeta } from "@/lib/recipe-format";
 import { Recipe } from "@/lib/types";
@@ -24,11 +25,13 @@ export function RecipeCard({
 }) {
   const url = recipe.source.url;
   const toBuy = match?.toBuy ?? [];
+  // Certaines sources renvoient une image par défaut qui refuse de se charger.
+  const [imageFailed, setImageFailed] = useState(false);
 
   return (
     <article className="tc-card">
       <div className="tc-thumb">
-        {recipe.image && (
+        {recipe.image && !imageFailed && (
           <Image
             src={recipe.image}
             alt=""
@@ -36,6 +39,7 @@ export function RecipeCard({
             sizes="84px"
             className="object-cover"
             unoptimized
+            onError={() => setImageFailed(true)}
           />
         )}
       </div>
